@@ -1,0 +1,504 @@
+#1)Mandelbrot
+
+import turtle
+import math
+
+def mandelbrot(z , c , n=20):
+    if abs(z) > 10 ** 12:
+        return float("nan")
+    elif n > 0:
+        return mandelbrot(z ** 2 + c, c, n - 1)
+    else:
+        return z ** 2 + c
+
+# screen size (in pixels)
+screenx, screeny = 800, 600
+
+# complex plane limits
+complexPlaneX, complexPlaneY = (-2.0, 2.0), (-1.0, 2.0)
+
+# discretization step
+step = 2
+
+# turtle config
+turtle.tracer(0, 0)
+turtle.setup(screenx, screeny)
+turtle.bgcolor("white")
+screen = turtle.Screen()
+screen.title("Drawing the Mandelbrot Fractal with Python Turtle(discretization step = %d)" % (int(step)))
+t = turtle.Turtle()
+t.penup()
+
+# px * pixelToX = x in complex plane coordinates
+pixelToX, pixelToY = (complexPlaneX[1] - complexPlaneX[0])/screenx, (complexPlaneY[1] - complexPlaneY[0])/screeny
+
+# plot
+for px in range(-int(screenx/2), int(screenx/2), int(step)):
+    for py in range(int(-screeny/2), int(screeny/2), int(step)):
+        x, y = px * pixelToX, py * pixelToY
+        m =  mandelbrot(0, x + 1j * y)
+        if not math.isnan(m.real):
+            color = [abs(math.sin(m.imag)) for i in range(3)]
+            t.color(color)
+            t.dot(2.4, color)
+            t.goto(px, py)
+    turtle.update()
+
+turtle.mainloop()
+#############################################################################################################################
+#2)Mandelbrot
+import turtle
+import math
+
+def mandelbrot(z , c , max_iter=20):
+    # Limiting value
+    if abs(z) > 10 ** 12:
+        return float("nan")
+    elif max_iter > 0:
+        return mandelbrot(z ** 2 + c, c, max_iter - 1)
+    # Once max_iter iterationsnare over, return
+    else:
+        return z ** 2 + c
+
+# Screen limits
+screen_width = 800
+screen_height = 600
+
+# Complex plane limits
+complexPlaneX, complexPlaneY = (-2.0, 2.0), (-2.0, 2.0)
+
+# Discretization step - To control resolution
+step = 1.5
+
+# Turtle windows configuration
+turtle.tracer(0, 0) # Turn OFF animation
+screen = turtle.Screen()
+screen.title("Mandelbrot Fractal")
+
+turt = turtle.Turtle()
+turt.penup()
+
+# Calculation of conversion factors - pixel to complex plane coordinates
+
+# px * pixelToX = x in complex plane coords
+# py * pixelToY = y in complex plane coords
+pixelToX, pixelToY = (complexPlaneX[1] - complexPlaneX[0])/screen_width, (complexPlaneY[1] - complexPlaneY[0])/screen_height
+
+# plot
+for px in range(-int(screen_width/2), int(screen_width/2), int(step)):
+    for py in range(-int(screen_width/2), int(screen_width/2), int(step)):
+        x, y = px * pixelToX, py * pixelToY
+        
+        m =  mandelbrot(0, x + 1j * y) # c = x + yj
+        
+        # Che k if real part is not NaN
+        if not math.isnan(m.real):
+            r = int(abs(math.sin(m.imag)) * 255)
+            g = int(abs(math.sin(m.imag + (2 * math.pi / 3))) * 255)
+            b = int(abs(math.sin(m.imag + (4 * math.pi / 3))) * 255)
+            color = (r, g, b)
+            
+            hex_color = "#{:02x}{:02x}{:02x}".format(color[0], color[1], color[2])
+            turt.color(hex_color)
+            turt.dot(2.4, hex_color) # Put dot at current pixel. Size=2.4
+            turt.goto(px, py) # Move to next pixel
+    turtle.update() # Update after one py loop
+
+turtle.mainloop()
+######################################################################################################################################
+#ccurve
+from turtle import *
+import math
+
+def init():
+    hideturtle()
+    color('black', 'white')
+    begin_fill()
+    delay(1)
+
+def draw_line(x0, y0, length, angle):
+    penup()
+    goto(x0, y0)
+    setheading(math.degrees(angle))
+    pendown()
+    forward(length)
+
+def draw_curve(x, y, depth, length, angle):
+    if depth == 1:
+        draw_line(x, y, length, angle)
+    else:
+        angle += math.radians(45)
+        length /= pow(2, 1/2)
+        draw_curve(x, y, depth-1, length, angle)
+        x += length*math.cos(angle)
+        y += length*math.sin(angle)
+        angle += math.radians(-90)
+        draw_curve(x, y, depth-1, length, angle)
+
+
+if __name__ == '__main__':
+    init()
+    draw_curve(0, 0, 12, 256, 0)
+################################################################################################
+#Dragon 
+
+from turtle import *
+import math
+
+def init():
+    hideturtle()
+    delay(1)
+
+def draw_line(x0, y0, length, angle):
+    penup()
+    goto(x0, y0)
+    setheading(math.degrees(angle))
+    pendown()
+    forward(length)
+
+def draw_curve(x, y, depth, length, angle, odd=True):
+    if depth == 1:
+        draw_line(x, y, length, angle)
+    else:
+        angle += math.radians(-45 if odd else 45)
+        length /= pow(2, 1/2)
+        draw_curve(x, y, depth-1, length, angle, False)
+        x += length*math.cos(angle)
+        y += length*math.sin(angle)
+        angle += math.radians(90 if odd else -90)
+        draw_curve(x, y, depth-1, length, angle, True)
+
+
+if __name__ == '__main__':
+    init()
+    color('black', 'white')
+    begin_fill()
+    draw_curve(0, 0, 10, 256, 0)
+############################################################################################################
+#Julia
+
+import turtle
+import math
+
+def julia(z , c , max_iter=20):
+    # Limiting value
+    if abs(z) > 10 ** 12:
+        return float("nan")
+    elif max_iter > 0:
+        return julia(z ** 2 + c, c, max_iter - 1)
+    # Once max_iter iterationsnare over, return
+    else:
+        return z ** 2 + c
+
+# Screen limits
+screen_width = 800
+screen_height = 600
+
+# Complex plane limits
+complexPlaneX, complexPlaneY = (-2.0, 2.0), (-2.0, 2.0)
+
+# Discretization step - To control resolution
+step = 1.5
+
+# Turtle windows configuration
+turtle.tracer(0, 0) # Turn OFF animation
+screen = turtle.Screen()
+screen.title("Julia Fractal")
+
+turt = turtle.Turtle()
+turt.penup()
+
+# Calculation of conversion factors - pixel to complex plane coordinates
+
+# px * pixelToX = x in complex plane coords
+# py * pixelToY = y in complex plane coords
+pixelToX, pixelToY = (complexPlaneX[1] - complexPlaneX[0])/screen_width, (complexPlaneY[1] - complexPlaneY[0])/screen_height
+
+julia_constant = complex(-0.7, 0.27015)
+
+# plot
+for px in range(-int(screen_width/2), int(screen_width/2), int(step)):
+    for py in range(-int(screen_width/2), int(screen_width/2), int(step)):
+        x, y = px * pixelToX, py * pixelToY
+        z = complex(x, y)
+        m =  julia(z, julia_constant)
+        
+        # Che k if real part is not NaN
+        if not math.isnan(m.real):
+            r = int(abs(math.sin(m.imag)) * 255)
+            g = int(abs(math.sin(m.imag + (2 * math.pi / 3))) * 255)
+            b = int(abs(math.sin(m.imag + (4 * math.pi / 3))) * 255)
+            color = (r, g, b)
+            
+            hex_color = "#{:02x}{:02x}{:02x}".format(color[0], color[1], color[2])
+            turt.color(hex_color)
+            turt.dot(2.4, hex_color) # Put dot at current pixel. Size=2.4
+            turt.goto(px, py) # Move to next pixel
+    turtle.update() # Update after one py loop
+
+turtle.mainloop()
+######################################################################################################################33
+#Terrain
+import turtle
+import random
+n=int(input("number of iterations of the terrain (give less than 10 ):-"))
+#try to give the iterations as even numbers to see symmetry
+# powers of 2 are more prefereable
+step=float(input("step length for forward propagation :- "))
+#adjust this step value to increase the size of the curve
+#note as you increase the number of intersections , decrease the forward step value
+
+"""
+L system used :- 
+variables : F
+constants : + *
+start  : F
+rules  : (F -> F+F*F+F)
+angle  : 60°,120°
+Here, F means "draw forward", + means "turn left by angle" , and * means turn right by 120 deg
+"""
+def generate_string(n):
+    if n == 0:
+        return "F"
+    else:
+        prev_string = generate_string(n-1)
+        new_string = ""
+        for char in prev_string:
+            if char == "F":
+                new_string += "F+F*F+F"
+            else:
+                new_string += char
+        return new_string
+draw_string=generate_string(n)
+print(len(draw_string))
+turtle.penup()
+turtle.goto(-150, -150)#starting pos of turtle to draw the curve
+turtle.pendown()
+turtle.speed(1000000)#speed of drawing can be still increased
+for i in draw_string:
+    if i=='F':
+        color = (random.random(), random.random(), random.random())  # Random RGB color
+        turtle.color(color)
+        turtle.forward(step)
+    elif i=='+':
+        turtle.left(60)
+    elif i=='*':
+        turtle.right(120)
+turtle.done()
+    
+############################################################################################################################
+#1)sier triangler
+
+import turtle
+import random
+n=int(input("number of iterations of the sier-triangle (give less than 10 ):-"))
+#try to give the iterations as even numbers to see symmetry
+# powers of 2 are more prefereable
+step=float(input("step length for forward propagation :- "))
+#adjust this step value to increase the size of the curve
+#note as you increase the number of intersections , decrease the forward step value
+
+"""
+L system used :- 
+variables : A B
+constants : + -
+start  : A
+rules  : (A → B-A-B), (B → A+B+A)
+angle  : 60°
+Here, A and B both mean "draw forward", + means "turn left by angle", and - means "turn right by angle" 
+"""
+def generate_string(n):
+    if n == 0:
+        return "A"
+    else:
+        prev_string = generate_string(n-1)
+        new_string = ""
+        for char in prev_string:
+            if char == "A":
+                new_string += "B-A-B"
+            elif char == "B":
+                new_string += "A+B+A"
+            else:
+                new_string += char
+        return new_string
+draw_string=generate_string(n)
+print(len(draw_string))
+turtle.penup()
+turtle.goto(-100, -100)#starting pos of turtle to draw the curve
+turtle.pendown()
+turtle.speed(1000000)#speed of drawing can be still increased
+for i in draw_string:
+    if i=='A' or i=='B':
+        color = (random.random(), random.random(), random.random())  # Random RGB color
+        turtle.color(color)
+        turtle.forward(step)
+    elif i=='+':
+        turtle.left(60)
+    elif i=='-':
+        turtle.right(60)
+turtle.done()
+    
+###########################################################################################################################
+#2) sierprinsky triangle
+
+'''
+import turtle
+
+w,h = 600,400
+
+screen = turtle.Screen()
+screen.setup(w,h)
+screen.screensize(4*w,4*h)
+screen.bgcolor('yellow')
+turtle.speed(10)
+
+l = turtle.Turtle()
+l.speed(5)
+l.setpos(-w//3,-h//3)
+l.color('green')
+
+#l-system
+gens = 3
+axiom = 'F'
+chr1, rule_1 = 'F', 'F-G+F+G-F'
+chr2, rule_2 = 'G', 'GG'
+step = 8
+angle = 120
+
+def apply(axiom):
+    return ''.join([rule_1 if chr==chr1 else rule_2 if chr==chr2 else chr
+                    for chr in axiom])
+
+def get_result(gens,axiom):
+    for gen in range(gens):
+        axiom = apply(axiom)
+    return axiom
+
+for gen in range(gens):
+    turtle.pencolor('white')
+    turtle.goto(-w// 2 + 60,h // 2 - 100)
+    turtle.clear()
+    turtle.write(f'generation: {gen}', align="left", font=("Arial", 60, "normal"))
+
+    axiom = get_result(gens,axiom)
+    for chr in axiom:
+        if chr == chr1 or chr == chr2:
+            l.forward(step)
+        elif chr == '+':
+            l.right(angle)
+        elif chr == '-':
+            l.left(angle)
+
+    axiom = apply(axiom)
+
+screen.exitonclick()
+'''
+############################################################################################################################################
+#3) sierprinsky
+'''
+import turtle
+
+def B(toy,length,levels):
+    if levels==0:
+        toy.forward(length)
+        return
+    A(toy,length,levels-1)
+    toy.left(60)
+    B(toy,length,levels-1)
+    toy.left(60)
+    A(toy,length,levels-1)
+
+
+
+
+
+def A(toy,length,levels):
+    if levels == 0:
+        toy.forward(length)
+        return
+    B(toy,length,levels-1)
+    toy.right(60)
+    A(toy,length,levels-1)
+    toy.right(60)
+    B(toy,length,levels-1)
+
+
+
+
+
+screen = turtle.Screen()
+screen.bgcolor('black')
+toy = turtle.Turtle()
+toy.speed(0)
+toy.color('green')
+#toy.forward(100)
+A(toy,5,10)
+turtle.done()
+turtle.exitonclick()
+'''
+#################################################################################################################
+# koch snowflake
+'''
+import turtle
+
+def koch_snowflake(t,length,levels):
+    if levels == 0:
+        t.forward(length)
+        return
+    else:
+        length = length/3
+
+        koch_snowflake(t, length, levels-1)
+        t.left(60)
+        koch_snowflake(t, length, levels-1)
+
+        t.right(120)
+        koch_snowflake(t, length, levels-1)
+
+        t.left(60)
+        koch_snowflake(t, length, levels-1)
+
+
+
+
+
+t = turtle.Turtle()
+t.hideturtle()
+t.color('black')
+
+for i in range(3):
+    koch_snowflake(t, 200, 4)
+    t.right(120)
+
+
+t.mainloop()
+########################################################################################################
+#tree - koch tree construction visualization
+
+import turtle
+
+MINIMUM_LENGTH = 5
+
+def build_tree(t,angle,length,shorten_by):
+    if length > MINIMUM_LENGTH:
+        t.forward(length)
+        nlength = length - shorten_by
+        t.left(angle)
+        build_tree(t, angle, nlength, shorten_by)
+
+        t.right(angle*2)
+        build_tree(t, angle, nlength, shorten_by)
+
+        t.left(angle)
+        t.backward(length)
+    return
+
+
+tree = turtle.Turtle()
+tree.hideturtle()
+tree.setheading(90)
+tree.color('green')
+
+build_tree(tree, 30,50, 5)
+turtle.mainloop()
+#########################################################################################################
