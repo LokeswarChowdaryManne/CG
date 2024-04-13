@@ -1,4 +1,19 @@
 #pip install opencv-python
+
+# Save the drawing as an image using OpenCV
+def save_drawing():
+    # Capture the drawing window as an image
+    screen.update()
+    screen_img = screen.getcanvas().postscript(colormode='color')
+    img = np.array(cv2.imread(screen_img.split()[0], cv2.IMREAD_COLOR))
+    
+    # Convert RGB to BGR
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    
+    # Save the image
+    cv2.imwrite("turtle_drawing.png", img)
+
+
 # 1) cannyedgedetection
 '''
 import cv2
